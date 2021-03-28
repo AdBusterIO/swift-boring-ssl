@@ -25,27 +25,25 @@ import PackageDescription
 // BoringSSL Commit: 04b3213d43492b6c9e0434d8e2a4530a9938f958
 
 let package = Package(
-    name: "swift-nio-ssl",
+    name: "boring-ssl",
     products: [
-        .library(name: "NIOSSL", targets: ["NIOSSL"]),
-        .executable(name: "NIOTLSServer", targets: ["NIOTLSServer"]),
-        .executable(name: "NIOSSLHTTP1Client", targets: ["NIOSSLHTTP1Client"]),
-/* This target is used only for symbol mangling. It's added and removed automatically because it emits build warnings. MANGLE_START
-        .library(name: "CNIOBoringSSL", type: .static, targets: ["CNIOBoringSSL"]),
-MANGLE_END */
+//         .library(name: "NIOSSL", targets: ["NIOSSL"]),
+//         .executable(name: "NIOTLSServer", targets: ["NIOTLSServer"]),
+//         .executable(name: "NIOSSLHTTP1Client", targets: ["NIOSSLHTTP1Client"]),
+        .library(name: "CBoringSSL", type: .static, targets: ["CBoringSSL", "CBoringSSLShims"]),
     ],
-    dependencies: [
-        .package(url: "https://github.com/apple/swift-nio.git", from: "2.15.0"),
-    ],
+//    dependencies: [
+//        .package(url: "https://github.com/apple/swift-nio.git", from: "2.15.0"),
+//    ],
     targets: [
-        .target(name: "CNIOBoringSSL"),
-        .target(name: "CNIOBoringSSLShims", dependencies: ["CNIOBoringSSL"]),
-        .target(name: "NIOSSL",
-                dependencies: ["NIO", "NIOConcurrencyHelpers", "CNIOBoringSSL", "CNIOBoringSSLShims", "NIOTLS"]),
-        .target(name: "NIOTLSServer", dependencies: ["NIO", "NIOSSL", "NIOConcurrencyHelpers"]),
-        .target(name: "NIOSSLHTTP1Client", dependencies: ["NIO", "NIOHTTP1", "NIOSSL", "NIOFoundationCompat"]),
-        .target(name: "NIOSSLPerformanceTester", dependencies: ["NIO", "NIOSSL"]),
-        .testTarget(name: "NIOSSLTests", dependencies: ["NIOTLS", "NIOSSL"]),
+        .target(name: "CBoringSSL"),
+        .target(name: "CBoringSSLShims", dependencies: ["CBoringSSL"]),
+//         .target(name: "NIOSSL",
+//                 dependencies: ["NIO", "NIOConcurrencyHelpers", "CNIOBoringSSL", "CNIOBoringSSLShims", "NIOTLS"]),
+//         .target(name: "NIOTLSServer", dependencies: ["NIO", "NIOSSL", "NIOConcurrencyHelpers"]),
+//         .target(name: "NIOSSLHTTP1Client", dependencies: ["NIO", "NIOHTTP1", "NIOSSL", "NIOFoundationCompat"]),
+//         .target(name: "NIOSSLPerformanceTester", dependencies: ["NIO", "NIOSSL"]),
+//         .testTarget(name: "NIOSSLTests", dependencies: ["NIOTLS", "NIOSSL"]),
     ],
     cxxLanguageStandard: .cxx14
 )

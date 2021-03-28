@@ -1,0 +1,42 @@
+name: Update
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v2
+    
+    - name: Install dependencies
+      run: |
+        sudo apt install rename
+
+    - name: Remove old files
+      run: |
+        rm -rf Sources/CBoringSSL
+        rm -rf Sources/CBoringSSLShims
+
+    - name: Copy files
+      run: |
+        cp -a Sources/CNIOBoringSSL Sources/CBoringSSL
+        cp -a Sources/CNIOBoringSSLShims Sources/CBoringSSLShims
+    
+    - name: Rename inside CBoringSSL
+      run: |
+        cd Sources/CBoringSSL
+        grep -rli 'CNIOBoringSSL' * | xargs -i@ sed -i 's/CNIOBoringSSL/CBoringSSL/g' @
+        grep -rli 'C_NIO_BORINGSSL' * | xargs -i@ sed -i 's/C_NIO_BORINGSSL/C_BORINGSSL/g' @
+        find . -name "CNIOBoringSSL*" -exec rename -v 's/CNIOBoringSSL/CBoringSSL/' {} \;
+        
+    - name: Rename inside CBoringSSLShims
+      run: |
+        cd Sources/CBoringSSLShims
+        grep -rli 'CNIOBoringSSL' * | xargs -i@ sed -i 's/CNIOBoringSSL/CBoringSSL/g' @
+        grep -rli 'C_NIO_BORINGSSL' * | xargs -i@ sed -i 's/C_NIO_BORINGSSL/C_BORINGSSL/g' @
+        find . -name "CNIOBoringSSL*" -exec rename -v 's/CNIOBoringSSL/CBoringSSL/' {} \;
+        
+    - name: Commit & Push changes
+      uses: EndBug/add-and-commit@v7.0.0
