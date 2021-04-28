@@ -63,6 +63,7 @@
 #include <CBoringSSL_obj.h>
 #include <CBoringSSL_x509v3.h>
 
+#include "../x509/internal.h"
 #include "internal.h"
 
 
